@@ -10,17 +10,31 @@
             <p>------------------------------------------------------------------</p>
         </div>
     }
-    <input bind="@number" />
+    <p>Valor máximo</p>
+    <input @bind="maxCost" @bind:event="oninput" />
+    <p>Tamanho da população</p>
+    <input @bind="popSize" @bind:event="oninput" />
+    <p>Probabilidade de cruzamento</p>
+    <input @bind="crossoverProb" @bind:event="oninput" />
+    <p>Probabilidade de mutação</p>
+    <input @bind="mutationProb" @bind:event="oninput" />
+    <p>Número de gerações</p>
+    <input @bind="generate" @bind:event="oninput" />
+
 </div>
 
-<button @onclick="@(() => Console.WriteLine(oh(number)))">Resolver</button>
+<button @onclick="@(() => Console.WriteLine(SolverKnapsack(maxCost, popSize, crossoverProb, mutationProb, generate)))">Resolver</button>
 
 @code{
 
     List<Item> listItems;
     Knapsack knap;
 
-    public int number { get; set; }
+    public int maxCost { get; set; }
+    public int popSize { get; set; }
+    public int crossoverProb { get; set; }
+    public int mutationProb { get; set; }
+    public int generate { get; set; }
 
     protected override void OnInitialized()
     {
@@ -49,9 +63,9 @@
         base.OnInitialized();
     }
 
-    int oh(int value)
+    int SolverKnapsack(int maxCost , int popSize, int crossoverProb, int mutationProb, int generate)
     {
-        knap = new Knapsack(value, 10, 0.70, 0.01, 1, 24, listItems);
+        knap = new Knapsack(maxCost, popSize, crossoverProb, mutationProb, 1, generate, listItems);
         return knap.Solver();
     }
 }
