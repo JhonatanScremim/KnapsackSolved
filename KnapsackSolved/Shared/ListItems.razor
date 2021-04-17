@@ -1,0 +1,57 @@
+﻿
+<div>
+    <h3>Itens</h3>
+    @foreach (var item in listItems)
+    {
+        <div>
+            <p>Nome: @item.Name</p>
+            <p>Custo: @item.Cost</p>
+            <p>Valor: @item.Value</p>
+            <p>------------------------------------------------------------------</p>
+        </div>
+    }
+    <input bind="@number" />
+</div>
+
+<button @onclick="@(() => Console.WriteLine(oh(number)))">Resolver</button>
+
+@code{
+
+    List<Item> listItems;
+    Knapsack knap;
+
+    public int number { get; set; }
+
+    protected override void OnInitialized()
+    {
+        listItems = new List<Item>()
+        {
+            new Item()
+            {
+                Name = "TV",
+                Cost = 5,
+                Value = 6
+            },
+            new Item()
+            {
+                Name = "Cadeira",
+                Cost = 6,
+                Value = 8
+            },
+            new Item()
+            {
+                Name = "Garrafa de água",
+                Cost = 7,
+                Value = 8
+            }
+        };
+
+        base.OnInitialized();
+    }
+
+    int oh(int value)
+    {
+        knap = new Knapsack(value, 10, 0.70, 0.01, 1, 24, listItems);
+        return knap.Solver();
+    }
+}
