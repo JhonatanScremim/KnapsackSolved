@@ -1,34 +1,42 @@
 ﻿
-<div>
-    <h3>Itens</h3>
+<div class="font">
+    <h3>Itens: </h3>
     @foreach (var item in listItems)
     {
-        <div>
-            <p>Nome: @item.Name</p>
-            <p>Custo: @item.Cost</p>
-            <p>Valor: @item.Value</p>
-            <p>------------------------------------------------------------------</p>
+        <div class="list-items">
+            <div class="item">
+                <p>Nome: @item.Name</p>
+                <p>Custo: @item.Cost</p>
+                <p>Valor: @item.Value</p>
+            </div>
         </div>
-    }
-    <p>Valor máximo</p>
-    <input @bind="maxCost" @bind:event="oninput" />
-    <p>Tamanho da população</p>
-    <input @bind="popSize" @bind:event="oninput" />
-    <p>Probabilidade de cruzamento</p>
-    <input @bind="crossoverProb" @bind:event="oninput" />
-    <p>Probabilidade de mutação</p>
-    <input @bind="mutationProb" @bind:event="oninput" />
-    <p>Número de gerações</p>
-    <input @bind="generate" @bind:event="oninput" />
 
+    }
+
+    <div class="values">
+        <p>Valor máximo: <input class="input-value" @bind="maxCost" @bind:event="oninput" /></p>
+        <p>Tamanho da população: <input class="input-value" @bind="popSize" @bind:event="oninput" /></p>
+        <p>Probabilidade de cruzamento: <input class="input-value" @bind="crossoverProb" @bind:event="oninput" /></p>
+        <p>Probabilidade de mutação: <input class="input-value" @bind="mutationProb" @bind:event="oninput" /></p>
+        <p>Número de gerações: <input class="input-value" @bind="generate" @bind:event="oninput" /></p>
+    </div>
 </div>
 
-<button @onclick="@(() => Console.WriteLine(SolverKnapsack(maxCost, popSize, crossoverProb, mutationProb, generate)))">Resolver</button>
+<button class="btn-solve" @onclick="@(() => SolverKnapsack(maxCost, popSize, crossoverProb, mutationProb, generate))">Resolver</button>
+
+@if (solved)
+{
+    <div>
+        <p>Solved</p>
+    </div>
+}
+
 
 @code{
 
     List<Item> listItems;
     Knapsack knap;
+    bool solved = false;
 
     public int maxCost { get; set; }
     public int popSize { get; set; }
@@ -63,9 +71,10 @@
         base.OnInitialized();
     }
 
-    int SolverKnapsack(int maxCost , int popSize, int crossoverProb, int mutationProb, int generate)
+    int SolverKnapsack(int maxCost, int popSize, int crossoverProb, int mutationProb, int generate)
     {
         knap = new Knapsack(maxCost, popSize, crossoverProb, mutationProb, 1, generate, listItems);
+        solved = true;
         return knap.Solver();
     }
 }

@@ -1,0 +1,50 @@
+﻿
+.font {
+    font-family: Avenir Next LT Pro;
+}
+
+h3 {
+    padding-top: 15px;
+}
+
+
+.item {
+    background-color: #7E9DB3;
+    border: 0;
+    border-radius: 10px;
+    justify-content: space-between;
+    width: 18%;
+}
+
+.item p {
+    color: white;
+    justify-content: space-between;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.values p{
+    font-size: 20px;
+}
+
+.input-value {
+    background-color: #EEEEEE;
+    margin-top: 20px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: center;
+    width: 5%;
+}
+
+.btn-solve {
+    background-color: #7E9DB3;
+    border: 0;
+    font-size: 18px;
+    border-radius: 10px;
+    color: #fff;
+    padding: 4px 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
