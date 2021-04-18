@@ -120,7 +120,7 @@ namespace KnapsackSolved.Helpers
                     str1 = roulette[ranChooseChromosome];
                     splitStr1 = str1.ToCharArray();
                     genome1 = Array.ConvertAll(splitStr1, c => (int)Char.GetNumericValue(c));
-                    int ranMutateAt = random.Next(0, 4);
+                    int ranMutateAt = random.Next(0, 3);
 
                     if (genome1[ranMutateAt] == 0)
                     {
@@ -166,10 +166,14 @@ namespace KnapsackSolved.Helpers
                     splitStr2 = str2.ToCharArray();
                     genome1 = Array.ConvertAll(splitStr1, c => (int)Char.GetNumericValue(c));
                     genome2 = Array.ConvertAll(splitStr2, c => (int)Char.GetNumericValue(c));
-                    int ranCrossoverFrom = random.Next(0, 4);
+                    int ranCrossoverFrom = random.Next(0, 3);
 
                     for (int i = 0; i <= ranCrossoverFrom; i++)
                     {
+                        if(i == 3)
+                        {
+                            int a = 0;
+                        }
                         int getGene1 = genome1[i];
                         int getGene2 = genome2[i];
                         genome1[i] = getGene2;
