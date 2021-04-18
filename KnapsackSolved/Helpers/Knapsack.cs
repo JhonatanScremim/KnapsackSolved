@@ -15,6 +15,7 @@ namespace KnapsackSolved.Helpers
         public int Generation { get; set; }
         public List<Item> Items { get; set; }
 
+
         public Knapsack(int maxCost, int popSize, double crossoverProb, double mutationProb, int terminate, int generation, List<Item> items)
         {
             MaxCost = maxCost;
@@ -26,9 +27,8 @@ namespace KnapsackSolved.Helpers
             Items = items;
         }
 
-        public int Solver()
+        public Result Solver()
         {
-            
             string[] population = new string[PopSize];  
             var chars = "01";
             var stringChars = new char[Items.Count];
@@ -208,8 +208,6 @@ namespace KnapsackSolved.Helpers
                     str2 = string.Join("", genome2);
                     roulette[0] = str1;
                     roulette[1] = str2;
-
-
                 }
 
                 if (chromosomeCost[Chromosome1] > MaxCost)
@@ -315,18 +313,28 @@ namespace KnapsackSolved.Helpers
             splitChromosome = Array.ConvertAll(splitStr1, c => (int)Char.GetNumericValue(c));
             totalValue = 0;
             totalCost = 0;
+            List<Item> selectedItems = new List<Item>();
 
             for (int m = 0; m < splitChromosome.Length; m++)
             {
                 if (splitChromosome[m] == 1)
                 {
+                    selectedItems.Add(Items[m]);
                     totalCost = totalCost + Items[m].Cost;
                     totalValue = totalValue + Items[m].Value;
                 }
             }
 
+
+
             Terminate = 1;
-            return 1;
+            return new Result()
+            {
+                Generation = this.Generation,
+                Items = selectedItems,
+                TotalCost = totalCost,
+                TotalValue = totalValue
+            };
         }
     }
 }

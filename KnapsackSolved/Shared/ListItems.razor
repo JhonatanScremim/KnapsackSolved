@@ -22,13 +22,28 @@
     </div>
 </div>
 
-<button class="btn-solve" @onclick="@(() => SolverKnapsack(maxCost, popSize, crossoverProb/100, mutationProb/100, generate))">Resolver</button>
+<button class="btn-solve" @onclick="@(() => result = SolverKnapsack(maxCost, popSize, crossoverProb/100, mutationProb/100, generate))">Resolver</button>
 
 @if (solved)
 {
-    <div>
-        <p>Solved</p>
-    </div>
+<div>
+    <p>Solved</p>
+    <p>Generation: @result.Generation</p>
+    <p>Items: </p>
+    @foreach (var item in @result.Items)
+    {
+        <div class="list-items">
+            <div class="item">
+                <p>Nome: @item.Name</p>
+                <p>Custo: @item.Cost</p>
+                <p>Valor: @item.Value</p>
+            </div>
+        </div>
+
+    }
+    <p>TotalCost: @result.TotalCost</p>
+    <p>TotalValue: @result.TotalValue</p>
+</div>
 }
 
 
@@ -37,6 +52,7 @@
     List<Item> listItems;
     Knapsack knap;
     bool solved = false;
+    Result result;
 
     public int maxCost { get; set; } = 20;
     public int popSize { get; set; } = 10;
@@ -58,7 +74,7 @@
         base.OnInitialized();
     }
 
-    int SolverKnapsack(int maxCost, int popSize, double crossoverProb, double mutationProb, int generate)
+    Result SolverKnapsack(int maxCost, int popSize, double crossoverProb, double mutationProb, int generate)
     {
         knap = new Knapsack(maxCost, popSize, crossoverProb, mutationProb, 1, generate, listItems);
         solved = true;
