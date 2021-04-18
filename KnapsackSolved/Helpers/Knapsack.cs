@@ -170,10 +170,6 @@ namespace KnapsackSolved.Helpers
 
                     for (int i = 0; i <= ranCrossoverFrom; i++)
                     {
-                        if(i == 3)
-                        {
-                            int a = 0;
-                        }
                         int getGene1 = genome1[i];
                         int getGene2 = genome2[i];
                         genome1[i] = getGene2;
