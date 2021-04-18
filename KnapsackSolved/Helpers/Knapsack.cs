@@ -89,7 +89,7 @@ namespace KnapsackSolved.Helpers
                 for (int c = 0; c < population.Length; c++)
                 {
                     percent = ((float)chromosomeCost[c] / (float)sumCost) * 100;
-                    percent = Convert.ToInt32(percent);
+                    percent = Convert.ToInt64(percent);
                     for (int r = 0; r < percent; r++)
                     {
                         array[s] = q;

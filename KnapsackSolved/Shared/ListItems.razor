@@ -14,15 +14,15 @@
     }
 
     <div class="values">
-        <p>Valor máximo: <input class="input-value" @bind="maxCost" @bind:event="oninput" /></p>
-        <p>Tamanho da população: <input class="input-value" @bind="popSize" @bind:event="oninput" /></p>
-        <p>Probabilidade de cruzamento: <input class="input-value" @bind="crossoverProb" @bind:event="oninput" /></p>
-        <p>Probabilidade de mutação: <input class="input-value" @bind="mutationProb" @bind:event="oninput" /></p>
-        <p>Número de gerações: <input class="input-value" @bind="generate" @bind:event="oninput" /></p>
+        <p>Valor máximo: <input class="input-value" @bind="@maxCost" @bind:event="oninput"/></p>
+        <p>Tamanho da população: <input class="input-value" @bind="@popSize" @bind:event="oninput"/></p>
+        <p>Probabilidade de cruzamento: <input class="input-value" @bind="@crossoverProb" @bind:event="oninput" type="range" max="100" min="0" step="5"/>@(crossoverProb/100)</p>
+        <p>Probabilidade de mutação: <input class="input-value" @bind="@mutationProb" @bind:event="oninput" type="range" max="100" min="0" step="5" />@(mutationProb/100)</p>
+        <p>Número de gerações: <input class="input-value" @bind="@generate" @bind:event="oninput" /></p>
     </div>
 </div>
 
-<button class="btn-solve" @onclick="@(() => SolverKnapsack(maxCost, popSize, crossoverProb, mutationProb, generate))">Resolver</button>
+<button class="btn-solve" @onclick="@(() => SolverKnapsack(maxCost, popSize, crossoverProb/100, mutationProb/100, generate))">Resolver</button>
 
 @if (solved)
 {
@@ -38,11 +38,11 @@
     Knapsack knap;
     bool solved = false;
 
-    public int maxCost { get; set; }
-    public int popSize { get; set; }
-    public int crossoverProb { get; set; }
-    public int mutationProb { get; set; }
-    public int generate { get; set; }
+    public int maxCost { get; set; } = 20;
+    public int popSize { get; set; } = 10;
+    public double crossoverProb { get; set; } = 70;
+    public double mutationProb { get; set; } = 10;
+    public int generate { get; set; } = 20;
 
     protected override void OnInitialized()
     {
@@ -71,7 +71,7 @@
         base.OnInitialized();
     }
 
-    int SolverKnapsack(int maxCost, int popSize, int crossoverProb, int mutationProb, int generate)
+    int SolverKnapsack(int maxCost, int popSize, double crossoverProb, double mutationProb, int generate)
     {
         knap = new Knapsack(maxCost, popSize, crossoverProb, mutationProb, 1, generate, listItems);
         solved = true;
