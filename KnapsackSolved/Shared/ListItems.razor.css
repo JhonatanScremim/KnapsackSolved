@@ -1,7 +1,4 @@
 ﻿
-.font {
-    font-family: Avenir Next LT Pro;
-}
 
 h3 {
     padding-top: 15px;
@@ -13,7 +10,9 @@ h3 {
     border: 0;
     border-radius: 10px;
     justify-content: space-between;
-    width: 18%;
+    width: 25%;
+    float: left;
+    margin: 10px 5px;
 }
 
 .item p {
@@ -24,7 +23,13 @@ h3 {
     margin-top: 5px;
 }
 
-.values p{
+.values {
+    margin-top: 10%;
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.values p {
     font-size: 20px;
 }
 
@@ -35,7 +40,7 @@ h3 {
     border-radius: 10px;
     font-size: 16px;
     text-align: center;
-    width: 5%;
+    width: 20%;
 }
 
 .btn-solve {
@@ -47,4 +52,48 @@ h3 {
     padding: 4px 10px;
     margin-bottom: 20px;
     margin-top: 20px;
+}
+
+button:hover {
+    background: #4B5989;
+}
+
+
+.container {
+    font-family: Avenir Next LT Pro;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 70vh;
+    grid-gap: 10px;
+}
+
+.items-container {
+    margin-top: 20px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.resolution {
+    font-family: Avenir Next LT Pro;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 70vh;
+    grid-gap: 10px;
+}
+
+.result-items {
+    margin-top: 20px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.result-values {
+    margin-top: 100px;
+    font-size: 20px;
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.result-values p{
+    font-size: 25px
 }

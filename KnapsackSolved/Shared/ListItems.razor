@@ -1,50 +1,52 @@
-﻿
-<div class="font">
-    <h3>Itens: </h3>
-    @foreach (var item in listItems)
-    {
-        <div class="list-items">
+﻿<div class="container">
+    <div class="items-container">
+        @foreach (var item in listItems)
+        {
             <div class="item">
                 <p>Nome: @item.Name</p>
                 <p>Custo: @item.Cost</p>
                 <p>Valor: @item.Value</p>
             </div>
-        </div>
-
-    }
-
+        }
+    </div>
     <div class="values">
-        <p>Valor máximo: <input class="input-value" @bind="@maxCost" @bind:event="oninput"/></p>
-        <p>Tamanho da população: <input class="input-value" @bind="@popSize" @bind:event="oninput"/></p>
-        <p>Probabilidade de cruzamento: <input class="input-value" @bind="@crossoverProb" @bind:event="oninput" type="range" max="100" min="0" step="5"/>@(crossoverProb/100)</p>
+        <p>Valor máximo: <input class="input-value" @bind="@maxCost" @bind:event="oninput" /></p>
+        <p>Tamanho da população: <input class="input-value" @bind="@popSize" @bind:event="oninput" /></p>
+        <p>Probabilidade de cruzamento: <input class="input-value" @bind="@crossoverProb" @bind:event="oninput" type="range" max="100" min="0" step="5" />@(crossoverProb/100)</p>
         <p>Probabilidade de mutação: <input class="input-value" @bind="@mutationProb" @bind:event="oninput" type="range" max="100" min="0" step="5" />@(mutationProb/100)</p>
         <p>Número de gerações: <input class="input-value" @bind="@generate" @bind:event="oninput" /></p>
+
+        <button class="btn-solve" @onclick="@(() => result = SolverKnapsack(maxCost, popSize, crossoverProb/100, mutationProb/100, generate))">Resolver</button>
+
     </div>
 </div>
 
-<button class="btn-solve" @onclick="@(() => result = SolverKnapsack(maxCost, popSize, crossoverProb/100, mutationProb/100, generate))">Resolver</button>
-
-@if (solved)
-{
-<div>
-    <p>Solved</p>
-    <p>Generation: @result.Generation</p>
-    <p>Items: </p>
-    @foreach (var item in @result.Items)
+<hr />
+<div class="container">
+    @if (solved)
     {
-        <div class="list-items">
-            <div class="item">
-                <p>Nome: @item.Name</p>
-                <p>Custo: @item.Cost</p>
-                <p>Valor: @item.Value</p>
-            </div>
+        <div class="result-items">
+            <h3>Resultado: </h3>
+            <h3>Itens selecionados: </h3>
+            @foreach (var item in @result.Items)
+            {
+                <div class="item">
+                    <p>Nome: @item.Name</p>
+                    <p>Custo: @item.Cost</p>
+                    <p>Valor: @item.Value</p>
+                </div>
+
+            }
+        </div>
+        <div class="result-values">
+            <p>Generation: @result.Generation</p>
+            <p>TotalCost: @result.TotalCost</p>
+            <p>TotalValue: @result.TotalValue</p>
         </div>
 
+
     }
-    <p>TotalCost: @result.TotalCost</p>
-    <p>TotalValue: @result.TotalValue</p>
 </div>
-}
 
 
 @code{
@@ -63,13 +65,13 @@
     protected override void OnInitialized()
     {
         listItems = new List<Item>()
-        {
+{
             new Item() { Name = "Phone", Cost = 8, Value = 7 },
             new Item() { Name = "Apple", Cost = 4, Value = 5 },
             new Item() { Name = "Book", Cost = 4, Value = 6 },
             new Item() { Name = "Game", Cost = 4, Value = 6 },
             new Item() { Name = "TV", Cost = 6, Value = 6 },
-            new Item() { Name = "Manga", Cost = 1, Value = 8 },
+            new Item() { Name = "Mangá", Cost = 1, Value = 8 },
             new Item() { Name = "Banana", Cost = 5, Value = 4},
             new Item() { Name = "Keyboard", Cost = 3, Value = 4 },
             new Item() { Name = "Mouse", Cost = 7, Value = 2 },
