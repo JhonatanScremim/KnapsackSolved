@@ -35,11 +35,11 @@ namespace KnapsackSolved.Helpers
             var random = new Random();
             int[] chromosomeCost = new int[PopSize];        
             int[] chromosomeValue = new int[PopSize];       
-            string str1;
+            string individuo;
             string str2;
             char[] splitStr1;
             char[] splitStr2;
-            int[] splitChromosome;                          
+            int[] selectedItemsArray;                          
             int totalValue;                                 
             int totalCost;
 
@@ -59,22 +59,25 @@ namespace KnapsackSolved.Helpers
                     }
                 }
 
+                //Calcula o custo total e o valor total de cada cromossomo
                 for (int i = 0; i < PopSize; i++)
                 {
-                    str1 = population[i];
-                    splitStr1 = str1.ToCharArray();
-                    splitChromosome = Array.ConvertAll(splitStr1, c => (int)Char.GetNumericValue(c));
+                    individuo = population[i];//string
+                    splitStr1 = individuo.ToCharArray();//chararray
+                    selectedItemsArray = Array.ConvertAll(splitStr1, c => (int)Char.GetNumericValue(c));//intarray
                     totalValue = 0;
                     totalCost = 0;
 
-                    for (int m = 0; m < splitChromosome.Length; m++)
+                    //Verifica o valor e o custo do Item com base na posição do 1 dentro do array
+                    for (int m = 0; m < selectedItemsArray.Length; m++)
                     {
-                        if (splitChromosome[m] == 1)
+                        if (selectedItemsArray[m] == 1)
                         {
                             totalCost += Items[m].Cost;
                             totalValue += Items[m].Value;
                         }
                     }
+                    //Adiciona nos arrays de custo e valor
                     chromosomeCost[i] = totalCost;
                     chromosomeValue[i] = totalValue;
                 }
@@ -82,59 +85,60 @@ namespace KnapsackSolved.Helpers
                 int sumCost = chromosomeCost.Sum();
                 int sumValue = chromosomeValue.Sum();
 
-
                 //Roda de roleta para selecionar 2 cromossomos da população
-                int[] array = new int[110];
+                int[] roletaArray = new int[110];
                 float percent;                          
                 int totalPercent = 0;                   
-                int q = 0;
-                int s = 0;
-                for (int c = 0; c < population.Length; c++)
+                int positionOfChromossome = 0;
+                int lastPosition = 0;
+
+                //Cria um valor porcentual para cada individuo e um array que representa todos esses porcentuais juntos
+                for (int i = 0; i < population.Length; i++)
                 {
-                    percent = ((float)chromosomeCost[c] / (float)sumCost) * 100;
+                    percent = ((float)chromosomeCost[i] / (float)sumCost) * 100;
                     percent = Convert.ToInt64(percent);
-                    for (int r = 0; r < percent; r++)
+                    for (int j = 0; j < percent; j++)
                     {
-                        array[s] = q;
-                        s++;
+                        roletaArray[lastPosition] = positionOfChromossome;
+                        lastPosition++;
                     }
-                    q++;
-                    totalPercent = totalPercent + Convert.ToInt32(percent);
+                    positionOfChromossome++;
+                    totalPercent += Convert.ToInt32(percent);
                 }
 
+                //Pega dois individuos aleatórios dentro do array com base nas porcentagens
                 int randomNumber1 = random.Next(0, totalPercent);                       
                 int randomNumber2 = random.Next(0, totalPercent);                       
-                                                                                                                                                                       
-                string[] roulette = new string[2];                                      
-
-                int Chromosome1 = array[randomNumber1];                                 
-                int Chromosome2 = array[randomNumber2];                                 
-                roulette[0] = population[Chromosome1];                                  
-                roulette[1] = population[Chromosome2];
+                string[] roleta = new string[2];                                      
+                int individuo1 = roletaArray[randomNumber1];                                 
+                int individuo2 = roletaArray[randomNumber2];                                 
+                roleta[0] = population[individuo1];                                  
+                roleta[1] = population[individuo2];
 
                 //Mutação de cromossomos
-                double randomDoubleNumber1 = random.NextDouble() * (1.000 - 0.000) + 0.000;
-                double mutationOccurs = Math.Round(randomDoubleNumber1, 3);                    
+                double randomNumber3 = random.NextDouble() * (1.000 - 0.000) + 0.000;
+                double mutationOccurs = Math.Round(randomNumber3, 3);                    
                 int[] genome1;
                 int[] genome2;
                 if (mutationOccurs <= MutationProb)
                 {
-                    int ranChooseChromosome = random.Next(0, 2);
-
-                    str1 = roulette[ranChooseChromosome];
-                    splitStr1 = str1.ToCharArray();
+                    //escolhe um dos dois
+                    int choosenChromossome = random.Next(0, 2);
+                    individuo = roleta[choosenChromossome];
+                    splitStr1 = individuo.ToCharArray();
                     genome1 = Array.ConvertAll(splitStr1, c => (int)Char.GetNumericValue(c));
-                    int ranMutateAt = random.Next(0, 3);
+                    int mutationAt = random.Next(0, 3);
 
-                    if (genome1[ranMutateAt] == 0)
+                    if (genome1[mutationAt] == 0)
                     {
-                        genome1[ranMutateAt] = 1;
+                        genome1[mutationAt] = 1;
                     }
-                    else if (genome1[ranMutateAt] == 1)
+                    else if (genome1[mutationAt] == 1)
                     {
-                        genome1[ranMutateAt] = 0;
+                        genome1[mutationAt] = 0;
                     }
 
+                    //Recalcula o valor e o custo daquele individuo (genoma)
                     totalValue = 0;
                     totalCost = 0;
                     for (int m = 0; m < genome1.Length; m++)
@@ -145,19 +149,20 @@ namespace KnapsackSolved.Helpers
                             totalValue += Items[m].Value;
                         }
                     }
-                    if (ranChooseChromosome == 0)
+                    //Seta dentro dos arrays o custo e o valor que foram calculados
+                    if (choosenChromossome == 0)
                     {
-                        chromosomeCost[Chromosome1] = totalCost;
-                        chromosomeValue[Chromosome1] = totalValue;
+                        chromosomeCost[individuo1] = totalCost;
+                        chromosomeValue[individuo1] = totalValue;
                     }
-                    else if (ranChooseChromosome == 1)
+                    else if (choosenChromossome == 1)
                     {
-                        chromosomeCost[Chromosome2] = totalCost;
-                        chromosomeValue[Chromosome2] = totalValue;
+                        chromosomeCost[individuo2] = totalCost;
+                        chromosomeValue[individuo2] = totalValue;
                     }
 
-                    str1 = string.Join("", genome1);
-                    roulette[ranChooseChromosome] = str1;                         
+                    individuo = string.Join("", genome1);
+                    roleta[choosenChromossome] = individuo;                         
                 }
 
                 //Ocorre crossover
@@ -165,9 +170,9 @@ namespace KnapsackSolved.Helpers
                 double crossoverOccurs = Math.Round(randomDoubleNumber2, 2);                   
                 if (crossoverOccurs <= CrossoverProb)
                 {
-                    str1 = roulette[0];
-                    str2 = roulette[1];
-                    splitStr1 = str1.ToCharArray();
+                    individuo = roleta[0];
+                    str2 = roleta[1];
+                    splitStr1 = individuo.ToCharArray();
                     splitStr2 = str2.ToCharArray();
                     genome1 = Array.ConvertAll(splitStr1, c => (int)Char.GetNumericValue(c));
                     genome2 = Array.ConvertAll(splitStr2, c => (int)Char.GetNumericValue(c));
@@ -189,8 +194,8 @@ namespace KnapsackSolved.Helpers
                             totalCost += Items[m].Cost;
                             totalValue += Items[m].Value;
                         }
-                        chromosomeCost[Chromosome1] = totalCost;
-                        chromosomeValue[Chromosome1] = totalValue;
+                        chromosomeCost[individuo1] = totalCost;
+                        chromosomeValue[individuo1] = totalValue;
                     }
                     totalValue = 0;
                     totalCost = 0;
@@ -201,99 +206,99 @@ namespace KnapsackSolved.Helpers
                             totalCost += Items[m].Cost;
                             totalValue += Items[m].Value;
                         }
-                        chromosomeCost[Chromosome2] = totalCost;
-                        chromosomeValue[Chromosome2] = totalValue;
+                        chromosomeCost[individuo2] = totalCost;
+                        chromosomeValue[individuo2] = totalValue;
                     }
 
-                    str1 = string.Join("", genome1);
+                    individuo = string.Join("", genome1);
                     str2 = string.Join("", genome2);
-                    roulette[0] = str1;
-                    roulette[1] = str2;
+                    roleta[0] = individuo;
+                    roleta[1] = str2;
                 }
 
                 //Função de fitness. Selecione o cromossomo de maior valor enquanto for inferior ao Custo Máximo da mochila.
-                if (chromosomeCost[Chromosome1] > MaxCost)
+                if (chromosomeCost[individuo1] > MaxCost)
                 {
-                    if (chromosomeCost[Chromosome2] <= MaxCost)
+                    if (chromosomeCost[individuo2] <= MaxCost)
                     {
                         for (int i = 0; i < population.Length; i++)
                         {
-                            if (chromosomeValue[i] < chromosomeValue[Chromosome2])
+                            if (chromosomeValue[i] < chromosomeValue[individuo2])
                             {
-                                population[i] = roulette[1];
-                                chromosomeCost[i] = chromosomeCost[Chromosome2];
-                                chromosomeValue[i] = chromosomeValue[Chromosome2];
+                                population[i] = roleta[1];
+                                chromosomeCost[i] = chromosomeCost[individuo2];
+                                chromosomeValue[i] = chromosomeValue[individuo2];
                                 break;
                             }
                             else if (chromosomeCost[i] > MaxCost)
                             {
-                                population[i] = roulette[1];
-                                chromosomeCost[i] = chromosomeCost[Chromosome2];
-                                chromosomeValue[i] = chromosomeValue[Chromosome2];
+                                population[i] = roleta[1];
+                                chromosomeCost[i] = chromosomeCost[individuo2];
+                                chromosomeValue[i] = chromosomeValue[individuo2];
                                 break;
                             }
                         }
                     }
                 }
-                else if (chromosomeCost[Chromosome2] > MaxCost)
+                else if (chromosomeCost[individuo2] > MaxCost)
                 {
-                    if (chromosomeCost[Chromosome1] <= MaxCost)
+                    if (chromosomeCost[individuo1] <= MaxCost)
                     {
                         for (int i = 0; i < population.Length; i++)
                         {
-                            if (chromosomeValue[i] < chromosomeValue[Chromosome1])
+                            if (chromosomeValue[i] < chromosomeValue[individuo1])
                             {
-                                population[i] = roulette[0];
-                                chromosomeCost[i] = chromosomeCost[Chromosome1];
-                                chromosomeValue[i] = chromosomeValue[Chromosome1];
+                                population[i] = roleta[0];
+                                chromosomeCost[i] = chromosomeCost[individuo1];
+                                chromosomeValue[i] = chromosomeValue[individuo1];
                                 break;
                             }
                             else if (chromosomeCost[i] > MaxCost)
                             {
-                                population[i] = roulette[0];
-                                chromosomeCost[i] = chromosomeCost[Chromosome1];
-                                chromosomeValue[i] = chromosomeValue[Chromosome1];
+                                population[i] = roleta[0];
+                                chromosomeCost[i] = chromosomeCost[individuo1];
+                                chromosomeValue[i] = chromosomeValue[individuo1];
                                 break;
                             }
                         }
                     }
                 }
-                else if (chromosomeValue[Chromosome1] >= chromosomeValue[Chromosome2])
+                else if (chromosomeValue[individuo1] >= chromosomeValue[individuo2])
                 {
                     for (int i = 0; i < population.Length; i++)
                     {
-                        if (chromosomeValue[i] < chromosomeValue[Chromosome1])
+                        if (chromosomeValue[i] < chromosomeValue[individuo1])
                         {
-                            population[i] = roulette[0];
-                            chromosomeCost[i] = chromosomeCost[Chromosome1];
-                            chromosomeValue[i] = chromosomeValue[Chromosome1];
+                            population[i] = roleta[0];
+                            chromosomeCost[i] = chromosomeCost[individuo1];
+                            chromosomeValue[i] = chromosomeValue[individuo1];
                             break;
                         }
                         else if (chromosomeCost[i] > MaxCost)
                         {
-                            population[i] = roulette[0];
-                            chromosomeCost[i] = chromosomeCost[Chromosome1];
-                            chromosomeValue[i] = chromosomeValue[Chromosome1];
+                            population[i] = roleta[0];
+                            chromosomeCost[i] = chromosomeCost[individuo1];
+                            chromosomeValue[i] = chromosomeValue[individuo1];
                             break;
                         }
                     }
                 }
-                else if (chromosomeValue[Chromosome2] >= chromosomeValue[Chromosome1])
+                else if (chromosomeValue[individuo2] >= chromosomeValue[individuo1])
                 {
                     for (int i = 0; i < population.Length; i++)
                     {
-                        if (chromosomeValue[i] < chromosomeValue[Chromosome2])
+                        if (chromosomeValue[i] < chromosomeValue[individuo2])
                         {
-                            population[i] = roulette[1];
-                            chromosomeCost[i] = chromosomeCost[Chromosome2];
-                            chromosomeValue[i] = chromosomeValue[Chromosome2];
+                            population[i] = roleta[1];
+                            chromosomeCost[i] = chromosomeCost[individuo2];
+                            chromosomeValue[i] = chromosomeValue[individuo2];
                             break;
                         }
                         else if (chromosomeCost[i] > MaxCost)
                         {
-                            population[i] = roulette[1];
-                            chromosomeCost[i] = chromosomeCost[Chromosome2];
-                            chromosomeValue[i] = chromosomeValue[Chromosome2];
+                            population[i] = roleta[1];
+                            chromosomeCost[i] = chromosomeCost[individuo2];
+                            chromosomeValue[i] = chromosomeValue[individuo2];
                             break;
                         }
                     }
@@ -311,16 +316,16 @@ namespace KnapsackSolved.Helpers
 
             int maxValue = chromosomeValue.Max();
             int maxIndex = chromosomeValue.ToList().IndexOf(maxValue);
-            str1 = population[maxIndex];
-            splitStr1 = str1.ToCharArray();
-            splitChromosome = Array.ConvertAll(splitStr1, c => (int)Char.GetNumericValue(c));
+            individuo = population[maxIndex];
+            splitStr1 = individuo.ToCharArray();
+            selectedItemsArray = Array.ConvertAll(splitStr1, c => (int)Char.GetNumericValue(c));
             totalValue = 0;
             totalCost = 0;
             List<Item> selectedItems = new List<Item>();
 
-            for (int m = 0; m < splitChromosome.Length; m++)
+            for (int m = 0; m < selectedItemsArray.Length; m++)
             {
-                if (splitChromosome[m] == 1)
+                if (selectedItemsArray[m] == 1)
                 {
                     selectedItems.Add(Items[m]);
                     totalCost = totalCost + Items[m].Cost;
