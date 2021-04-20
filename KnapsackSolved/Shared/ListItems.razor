@@ -10,7 +10,7 @@
         }
     </div>
     <div class="values">
-        <p>Valor máximo: <input class="input-value" @bind="@maxCost" @bind:event="oninput" /></p>
+        <p>Peso máximo: <input class="input-value" @bind="@maxCost" @bind:event="oninput" /></p>
         <p>Tamanho da população: <input class="input-value" @bind="@popSize" @bind:event="oninput" /></p>
         <p>Probabilidade de cruzamento: <input class="input-value" @bind="@crossoverProb" @bind:event="oninput" type="range" max="100" min="0" step="5" />@(crossoverProb/100)</p>
         <p>Probabilidade de mutação: <input class="input-value" @bind="@mutationProb" @bind:event="oninput" type="range" max="100" min="0" step="5" />@(mutationProb/100)</p>
@@ -39,9 +39,9 @@
             }
         </div>
         <div class="result-values">
-            <p>Generation: @result.Generation</p>
-            <p>TotalCost: @result.TotalCost</p>
-            <p>TotalValue: @result.TotalValue</p>
+            <p>Gerações passadas: @result.Generation</p>
+            <p>Peso total: @result.TotalCost</p>
+            <p>Valor total: @result.TotalValue</p>
         </div>
 
 
